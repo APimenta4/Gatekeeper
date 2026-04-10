@@ -3,12 +3,7 @@ import subprocess
 import click
 
 
-def setup() -> None:
-    _raise_if_in_not_git_repository()
-    click.echo("Installing Gatekeeper pre-commit hooks...")
-
-
-def _raise_if_in_not_git_repository() -> None:
+def raise_if_in_not_git_repository() -> None:
     try:
         subprocess.run(
             ["git", "rev-parse", "--git-dir"],

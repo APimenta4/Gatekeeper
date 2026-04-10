@@ -1,4 +1,0 @@
-# Commands
-
-## `gatekeeper setup`
-

@@ -7,9 +7,7 @@
 
 ## Adding a new command
 
-1. Create a new file in the `commands` directory with the name of the command you want to add (e.g., `new_command.py`)
-2. In this file, define a *public* function that implements the logic for your command. You may also create private helper functions *(starting with "_", e.g., `_helper_function`)*
-3. Reexport the function in `__init__.py` in the `commands` directory
+To add a new command, simply add the function that contains the command logic to the `all_cli_commands` list in `__init__.py` inside the `commands` directory
 
 That's it, the command should now be available as a subcommand of the main CLI group. If you installed the package in editable mode, you can test it immediately by running `gatekeeper new-command` in your terminal.
 
