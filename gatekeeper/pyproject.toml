@@ -1,0 +1,43 @@
+[project]
+name = "gatekeeper"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "Afonso Pimenta", email = "afonsocpimenta04@gmail.com" }
+]
+requires-python = ">=3.13"
+dependencies = [
+    "click>=8.3.2",
+]
+
+[project.optional-dependencies]
+dev = [
+    "black>=24.3.0",
+    "isort>=5.13.0",
+    "flake8>=7.0.0",
+]
+
+[project.scripts]
+gatekeeper = "gatekeeper.cli:main"
+
+[build-system]
+requires = ["uv_build>=0.9.15,<0.10.0"]
+build-backend = "uv_build"
+
+[tool.black]
+line-length = 88
+target-version = ["py313"]
+
+[tool.isort]
+profile = "black"
+line_length = 88
+
+[tool.flake8]
+max-line-length = 88
+exclude = [".venv", "venv", ".env", "env", ".git", "__pycache__"]
+
+[tool.mypy]
+python_version = "3.13"
+warn_return_any = true
+max-line-length = 88
