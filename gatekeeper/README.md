@@ -74,3 +74,8 @@ This section lists the programming languages supported by Gatekeeper and the cor
 
 - **PHP** - Progpilot
 
+### Known limitations
+
+Pre-commit hooks have a known limitation where they can't output the stdout of the hook being run in real time.
+
+For this reason, you will only be available to see the logs and results of the hook after it finishes running.

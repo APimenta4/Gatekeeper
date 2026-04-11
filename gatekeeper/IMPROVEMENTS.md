@@ -4,3 +4,4 @@
 - [ ] More user configuration
 - [ ] Output format is messy
 - [ ] Installation is always repo-wide (.pre-commit-config is commited) - investigate if local only option is possible
+- [ ] Precommit hook currently scans whole repo, while commonly it should only be changed files (or changed diffs)

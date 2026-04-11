@@ -30,7 +30,8 @@ def _create_precommit_config() -> None:
         "name": "Gatekeeper Security Scanner",
         "entry": "gatekeeper scan",
         "language": "system",
-        "stages": ["commit"],
+        "stages": ["pre-commit"],
+        "pass_filenames": False,
     }
 
     if precommit_file_path.exists():
