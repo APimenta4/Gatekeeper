@@ -21,7 +21,7 @@ for cli_command in all_cli_commands:
 
 
 def _warn_missing_dependencies() -> None:
-    required_tools = ["docker", "pre-commit", "fk", "nigga"]
+    required_tools = ["docker", "git", "pre-commit", "test_warning"]
     missing_tools: List[str] = []
 
     for tool in required_tools:

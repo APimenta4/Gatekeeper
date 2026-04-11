@@ -1,4 +1,5 @@
 import subprocess
+import sys
 from pathlib import Path
 
 import click
@@ -75,7 +76,11 @@ def _create_precommit_config() -> None:
 def _run_precommit_install() -> None:
     cli_log("Installing hook...")
     try:
-        subprocess.run(["pre-commit", "install"], check=True, capture_output=True)
+        subprocess.run(
+            [sys.executable, "-m", "pre_commit", "install"],
+            check=True,
+            capture_output=True,
+        )
     except subprocess.CalledProcessError as e:
         cli_log(
             f"Failed to install pre-commit hooks: {e.stderr.decode()}",

@@ -11,9 +11,11 @@ You may also run the SAST tools on demand by using the CLI directly.
 ### Requirements
 
 - Python 3.13 or higher
-- `pipx` (recommended) or raw `pip` (*install with `pip install pipx`*)
-- `pre-commit` (install with `pipx install pre-commit` or `pip install pre-commit`)
+- git
 - Docker
+- `pipx` (install with `pip install pipx`. *You can use `pip` if you prefer, but `pipx` is recommended*)
+- `pre-commit` (install with `pip install pre-commit`. *If you are using pipx, you may skip this*)
+
 
 ### Setup
 
@@ -29,7 +31,7 @@ You may also run the SAST tools on demand by using the CLI directly.
 
 ### Requirements
 
-- uv ([install with `pip install uv` or equivalent](https://docs.astral.sh/uv/getting-started/installation/#installation-methods))
+- uv ([install with `pipx install uv` or equivalent](https://docs.astral.sh/uv/getting-started/installation/#installation-methods))
 
 *Optionally, you may manage the virtual environment manually and install the dependencies with any tool that you prefer*
 
@@ -37,8 +39,7 @@ You may also run the SAST tools on demand by using the CLI directly.
 
 1. Clone the repository and navigate to the project directory.
 2. Install the dependencies with `uv sync` (or your preferred method).
-step 3 sohuld be pipx
-1. Run `uv pipx install . -e` to install the package in editable mode *(This allows you to make changes to the code and see the effects immediately without needing to reinstall)*
+3. Run `uv pipx install . -e` to install the package in editable mode *(This allows you to make changes to the code and see the effects immediately without needing to reinstall)*
 
 That's it - you are now ready to develop!
 
