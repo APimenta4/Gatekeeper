@@ -21,6 +21,7 @@ You may also run the SAST tools on demand by using the CLI directly.
 
 1. Clone this repository and navigate to the project directory.
 2. Install the gatekeeper package globally in your machine using `pipx install .` (or `pip install .`).
+3. Build the Docker image for the scanning engine by running `docker build -t gatekeeper-scanner .` in the project directory.
 
 ### Using Gatekeeper
 
@@ -38,18 +39,24 @@ You may also run the SAST tools on demand by using the CLI directly.
 ### Setup
 
 1. Clone the repository and navigate to the project directory.
-2. Install the dependencies with `uv sync` (or your preferred method).
+2. Install the dependencies with `uv sync --extra dev` (or your preferred method).
 3. Run `uv pipx install . -e` to install the package in editable mode *(This allows you to make changes to the code and see the effects immediately without needing to reinstall)*
 
 That's it - you are now ready to develop!
 
-## Documentation
+Just like when using the package as a user, you also need to build the Docker image for the scanning engine to be able to test the scanning functionality. You can do this by running `docker build -t gatekeeper-scanner .` in the project directory.
 
+*You will have to repeat the step above every time you make changes to the `Dockerfile`, `docker_scan_entrypoint.py`, or `tools-config.yaml`*
+
+## Documentation
 
 ### Commands
 
-- `gatekeeper setup` - Installs gatekeeper on the current git repository. This allows for the security checks to run on every commit.
-- `gatekeeper scan` - Runs the SAST tools on demand. This is also the command called by the pre-commit hook on every commit.
+- `gatekeeper setup` - Installs gatekeeper on the current git repository. This allows for the security checks to run on every commit
+- `gatekeeper scan` - Runs the SAST tools on demand. This is also the command called by the pre-commit hook on every commit
+  
+  Additional arguments:
+  - `--verbose` (`-v`): attaches the docker container shell to the terminal, allowing you to see the scan progress in real time
 
 ### SAST Tools
 

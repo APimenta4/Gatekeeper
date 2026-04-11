@@ -3,6 +3,7 @@ from typing import List
 
 import click
 
+from gatekeeper.utils.docker import raise_if_docker_not_running
 from gatekeeper.utils.printer import LogLevel, cli_log
 
 from .commands import all_cli_commands
@@ -13,14 +14,15 @@ from .commands import all_cli_commands
 def main():
     """Gatekeeper CLI"""
     cli_log("Starting Gatekeeper...")
-    _warn_missing_dependencies()
+    _warn_for_missing_dependencies()
+    raise_if_docker_not_running()
 
 
 for cli_command in all_cli_commands:
     main.command(cli_command)
 
 
-def _warn_missing_dependencies() -> None:
+def _warn_for_missing_dependencies() -> None:
     required_tools = ["docker", "git", "pre-commit", "test_warning"]
     missing_tools: List[str] = []
 

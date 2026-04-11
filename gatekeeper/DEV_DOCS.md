@@ -6,12 +6,29 @@
 - **click** - Python library used to help building the CLI
 - **pipx** - a tool to install and run Python applications in isolated environments with the intent of being globally available. Think of it as your "npm" or "brew" but for Python packages
 - **pre-commit** - tool used for managing the pre-commit hooks that run the SAST tools on every commit
+- **Docker** - used to run the SAST tools in a consistent environment, without worrying about polluting the user's environment with multiple tools and package managers
+
+## Docker usage
+
+Gatekeeper relies on a single Docker image that contains contains a lightweight linux environment with apt-get and pip package managers. This image is reused across every scan, and it works by installing dependencies and then running the SAST tools on demand based on the passed parameters.
+
+In order to do this, gatekeeper mounts the repository being scanned into the container and then runs the `docker_scan_entrypoint.py` file as the entry point, which includes the logic for executing the SAST tools.
+
+Gatekeeper takes care not only of invoking the container but also cleaning it up after the scan is done.
+
+As mentioned in the [README section](./README.md#developing), you need to build the Docker image at least once before being able to use the scanning functionality, and you also need to rebuild it every time you make changes to the `Dockerfile`, `docker_scan_entrypoint.py`, or `tools-config.yaml` files, since those are statically copied into the container image.
 
 ## Adding a new command
 
 To add a new command, simply add the function that contains the command logic to the `all_cli_commands` list in `__init__.py` inside the `commands` directory
 
 That's it, the command should now be available as a subcommand of the main CLI group. If you installed the package in editable mode, you can test it immediately by running `gatekeeper new-command` in your terminal.
+
+## Adding a new SAST tool
+
+To add a new SAST tool, you simply have to change the `tools-config.yaml` file to add the configuration for the new tool.
+
+That's it - just ensure that the configuration is valid and that the commands are runnable in the linux docker container. You do not need to change anything else.
 
 ## Logging and exceptions
 

@@ -1,4 +1,12 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, fields
+from functools import cache
+from pathlib import Path
+from typing import Tuple
+
+import click
+import yaml
+
+from gatekeeper.utils.printer import LogLevel, cli_log
 
 
 @dataclass(frozen=True)
@@ -7,9 +15,6 @@ class SastTool:
     regardless of the programming languages used."""
 
     name: str
-    # Commands to be used in the docker engine to install and run the tool
-    tool_installation_command: str
-    tool_execution_command: str
 
 
 @dataclass(frozen=True)
@@ -20,46 +25,40 @@ class SpecificSastTool(SastTool):
     supported_file_extensions: frozenset[str]
 
 
-GENERIC_SAST_TOOLS = {
-    SastTool(
-        name="Semgrep",
-        tool_installation_command="pip install semgrep",
-        tool_execution_command="semgrep --config=auto --json --output {output_file}",
-    ),
-    SastTool(
-        name="Trivy",
-        tool_installation_command="apt install trivy",
-        tool_execution_command="trivy fs --format json --output {output_file} .",
-    ),
-}
+@cache
+def get_tools_from_config() -> Tuple[frozenset[SastTool], frozenset[SpecificSastTool]]:
+    def _add_tool(group: set, config: dict, generic: bool = False) -> None:
+        """Safely parses a tool based on a dictionary config, skipping malformed ones."""
+        target_class = SastTool if generic else SpecificSastTool
 
-SPECIFIC_SAST_TOOLS = {
-    SpecificSastTool(
-        name="Bandit",
-        tool_installation_command="pip install bandit",
-        tool_execution_command="bandit -r . -f json -o {output_file}",
-        supported_file_extensions=frozenset({".py"}),
-    ),
-}
+        valid_fields = {f.name for f in fields(target_class)}
+        filtered_config = {k: v for k, v in config.items() if k in valid_fields}
 
-ALL_SAST_TOOLS = GENERIC_SAST_TOOLS.union(SPECIFIC_SAST_TOOLS)
+        if "supported_file_extensions" in filtered_config:
+            filtered_config["supported_file_extensions"] = frozenset(
+                filtered_config["supported_file_extensions"]
+            )
 
-# to be added:
-# Language.JAVASCRIPT: LanguageConfig(
-#         file_extensions={".js", ".jsx"},
-#     ),
-#     Language.TYPESCRIPT: LanguageConfig(
-#         file_extensions={".ts", ".tsx"},
-#     ),
-#     Language.JAVA: LanguageConfig(
-#         file_extensions={".java"},
-#     ),
-#     Language.GO: LanguageConfig(
-#         file_extensions={".go"},
-#     ),
-#     Language.CPP: LanguageConfig(
-#         file_extensions={".cpp"},
-#     ),
-#     Language.C: LanguageConfig(
-#         file_extensions={".c"},
-#     ),
+        try:
+            group.add(target_class(**filtered_config))
+        except Exception as e:
+            cli_log(
+                f"Skipping malformed SAST tool: "
+                f"{click.style(str(config.get('name', 'unknown')), 'magenta', bold=True)}. "
+                f"Error: {click.style(str(e), 'red', bold=True)}",
+                level=LogLevel.WARNING,
+            )
+
+    config_path = Path(__file__).parent.parent.parent.parent / "tools-config.yaml"
+    with open(config_path, "r", encoding="utf-8") as f:
+        config = yaml.safe_load(f)
+
+    generic_tools = set()
+    for tool_config in config.get("generic_tools", []):
+        _add_tool(generic_tools, tool_config, generic=True)
+
+    specific_tools = set()
+    for tool_config in config.get("specific_tools", []):
+        _add_tool(specific_tools, tool_config, generic=False)
+
+    return frozenset(generic_tools), frozenset(specific_tools)

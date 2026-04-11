@@ -13,6 +13,8 @@ class LogLevel(Enum):
 
 
 def cli_log(message: str, level: LogLevel = LogLevel.INFO) -> None:
+    """Logs a message to the CLI with a timestamp, log level, and consistent formatting."""
+
     timestamp = click.style(f"[{datetime.now().strftime("%H:%M:%S")}]", fg="green")
     cli_prefix = click.style("[Gatekeeper]", fg="cyan", bold=True)
     level_tag = _get_level_tag(level)
@@ -23,7 +25,7 @@ class CliException(click.ClickException):
     """Thin wrapper around ClickException to allow for custom formatting of error messages."""
 
     def show(self, file: IO[Any] | None = None) -> None:
-        cli_log(self.format_message(), LogLevel.ERROR)
+        cli_log(f"Aborting: {self.format_message()}", LogLevel.ERROR)
 
 
 def _get_level_tag(level: LogLevel) -> str:
