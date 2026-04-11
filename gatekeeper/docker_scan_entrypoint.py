@@ -20,7 +20,6 @@ def install_tools(tools_install_commands: dict) -> None:
             )
             continue
 
-        print(f"Installing {tool_name}...")
         try:
             subprocess.run(install_cmd, shell=True, check=True)
         except subprocess.CalledProcessError as e:
@@ -53,7 +52,6 @@ def main():
         tool_output = output_dir / f"{tool_name.lower()}_results.json"
         execution_command = tool["execution_command"].format(output_file=tool_output)
 
-        print(f"Running {tool_name}...")
         try:
             subprocess.run(execution_command, shell=True, check=False, cwd="/repo")
             if tool_output.exists():

@@ -6,8 +6,9 @@ from time import sleep
 import click
 from halo import Halo
 
-from gatekeeper.defaults import SCAN_ENGINE_FINDINGS_FILE_PATH
+from gatekeeper.defaults import SCAN_ENGINE_FINDINGS_FILE_NAME
 from gatekeeper.utils.git import (
+    get_git_root_path,
     get_git_tracked_files_current_dir,
     raise_if_in_not_git_repository,
 )
@@ -28,18 +29,37 @@ from gatekeeper.utils.sast_tools import (
 def scan(verbose: bool) -> None:
     """Runs the SAST tools on the current repository immediately"""
     raise_if_in_not_git_repository()
+    _create_gitignored_gatekeeper_directory_if_not_exists()
+    git_root_path = get_git_root_path()
+    findings_file_path = str(
+        Path(git_root_path) / ".gatekeeper" / SCAN_ENGINE_FINDINGS_FILE_NAME
+    )
     sast_tools = select_sast_tools_based_on_codebase()
-    invoke_scanning_docker_engine(SCAN_ENGINE_FINDINGS_FILE_PATH, sast_tools, verbose)
+    invoke_scanning_docker_engine(SCAN_ENGINE_FINDINGS_FILE_NAME, sast_tools, verbose)
 
     # do_things_with_log_file_like_print
+    # add policy checking
 
-    # delete_log_file()
+    # maybe_delete_files
 
-    findings_path = Path(SCAN_ENGINE_FINDINGS_FILE_PATH).expanduser().resolve()
+    findings_path = Path(findings_file_path).expanduser().resolve()
     cli_log(
         f"{click.style('Scan completed!', fg='green', bold=True)} "
         f"Check the findings file for details: {findings_path}"
     )
+
+
+def _create_gitignored_gatekeeper_directory_if_not_exists() -> None:
+    git_root_path = get_git_root_path()
+    gatekeeper_dir = Path(git_root_path) / ".gatekeeper"
+    gatekeeper_dir.mkdir(exist_ok=True)
+
+    gitignore_path = gatekeeper_dir / ".gitignore"
+    if not gitignore_path.exists():
+        gitignore_path.write_text(
+            "# This directory is used exclusively by Gatekeeper and should not "
+            "be committed to version control\n# Please keep the whole directory gitignored\n*\n"
+        )
 
 
 def select_sast_tools_based_on_codebase() -> set[SastTool]:
@@ -83,11 +103,13 @@ def _get_tools_from_extensions(
 
 
 def invoke_scanning_docker_engine(
-    findings_file_path: str, sast_tools: set[SastTool], verbose: bool = False
+    findings_file_name: str, sast_tools: set[SastTool], verbose: bool = False
 ) -> None:
     tool_names = ",".join(tool.name for tool in sast_tools)
 
     cli_log("Starting scanning docker engine...")
+
+    container_output_path = f"/repo/.gatekeeper/{findings_file_name}"
 
     docker_cmd = [
         "docker",
@@ -99,7 +121,7 @@ def invoke_scanning_docker_engine(
         "--tools",
         tool_names,
         "--output",
-        findings_file_path,
+        container_output_path,
     ]
 
     if verbose:
