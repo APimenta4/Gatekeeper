@@ -12,11 +12,11 @@
 
 Gatekeeper relies on a single Docker image that contains contains a lightweight linux environment with apt-get and pip package managers. This image is reused across every scan, and it works by installing dependencies and then running the SAST tools on demand based on the passed parameters.
 
-In order to do this, gatekeeper mounts the repository being scanned into the container and then runs the `docker_scan_entrypoint.py` file as the entry point, which includes the logic for executing the SAST tools.
+In order to do this, gatekeeper mounts the repository being scanned into the container and then runs the `docker_scan_command_entrypoint.py` file as the entry point, which includes the logic for executing the SAST tools.
 
 Gatekeeper takes care not only of invoking the container but also cleaning it up after the scan is done.
 
-As mentioned in the [README section](./README.md#developing), you need to build the Docker image at least once before being able to use the scanning functionality, and you also need to rebuild it every time you make changes to the `Dockerfile`, `docker_scan_entrypoint.py`, or `tools-config.yaml` files, since those are statically copied into the container image.
+As mentioned in the [README section](./README.md#developing), you need to build the Docker image at least once before being able to use the scanning functionality, and you also need to rebuild it every time you make changes to files in the `docker/` directory (`Dockerfile`, `docker_scan_command_entrypoint.py`, `docker_install_tools_image_step.py`) or the `tools-config.yaml` file, since those are statically copied into the container image.
 
 ## Adding a new command
 
