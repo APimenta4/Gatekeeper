@@ -1,6 +1,6 @@
 # Gatekeeper
 
-Gatekeeper is a security tool that runs instantly, gives clear feedback, and integrates with CI/CD as a second enforcement layer.
+Gatekeeper is a security tool that runs instantly and gives instant feedback by running multiple SAST tools.
 
 It is setup as an installable package. This allows you to install it in your global Python environment and use it as a command while inside any repository to install the pre-commit hooks that it relies on to run multiple SAST tools.
 
@@ -14,13 +14,15 @@ You may also run the SAST tools on demand by using the CLI directly.
 - git
 - Docker
 - `pipx` (install with `pip install pipx`. *You can use `pip` if you prefer, but `pipx` is recommended*)
-- `pre-commit` (install with `pip install pre-commit`. *If you are using pipx, you may skip this*)
 
 
 ### Setup
 
 1. Clone this repository and navigate to the project directory.
 2. Install the gatekeeper package globally in your machine using `pipx install .` (or `pip install .`).
+
+-  *if you are using raw pip, you have to install the dependencies first, either by using `uv sync` or `pip install -r requirements.txt`*
+
 3. Build the Docker image for the scanning engine by running `docker build -f docker/Dockerfile -t gatekeeper-scanner .` in the project directory.
 
 ### Using Gatekeeper
@@ -39,8 +41,11 @@ You may also run the SAST tools on demand by using the CLI directly.
 ### Setup
 
 1. Clone the repository and navigate to the project directory.
-2. Install the dependencies with `uv sync --extra dev` (or your preferred method).
-3. Run `uv pipx install . -e` to install the package in editable mode *(This allows you to make changes to the code and see the effects immediately without needing to reinstall)*
+2. Install the dependencies with `uv sync` (or your preferred method). This is important for getting autocompletion and type checking in the IDE.
+
+- *you may use `uv sync --extra dev` for additional tooling like linters and formatters*
+
+1. Run `pipx install . -e` to install the package in editable mode *(This allows you to make changes to the code and see the effects immediately without needing to reinstall). As mentioned previously, you can also manage the dependencies yourself and/or use raw pip*
 
 That's it - you are now ready to develop!
 
