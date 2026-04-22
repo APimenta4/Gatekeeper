@@ -6,11 +6,11 @@
 - **click** - Python library used to help building the CLI
 - **pipx** - a tool to install and run Python applications in isolated environments with the intent of being globally available. Think of it as your "npm" or "brew" but for Python packages
 - **pre-commit** - tool used for managing the pre-commit hooks that run the SAST tools on every commit
-- **Docker** - used to run the SAST tools in a consistent environment, without worrying about polluting the user's environment with multiple tools and package managers
+- **Docker** - used to run the SAST tools in a consistent environment, without worrying about polluting the user's environment with multiple tools and package managers or dealing with compatibility issues across different operating systems
 
 ## Docker usage
 
-Gatekeeper relies on a single Docker image that contains contains a lightweight linux environment with apt-get and pip package managers. This image is reused across every scan, and it works by installing dependencies and then running the SAST tools on demand based on the passed parameters.
+Gatekeeper relies on a single Docker image that contains a lightweight linux environment with some package managers. This image is reused across every scan, and it works by installing all dependencies once and then running the SAST tools on demand based on the passed parameters.
 
 In order to do this, gatekeeper mounts the repository being scanned into the container and then runs the `docker_scan_command_entrypoint.py` file as the entry point, which includes the logic for executing the SAST tools.
 
