@@ -15,15 +15,15 @@ def main():
 
     for tool in all_tools:
         name = tool.get("name", "unknown")
-        install_cmd = tool.get("installation_command")
+        installation_command = tool.get("installation_command")
 
-        if not install_cmd:
+        if not installation_command:
             print(f"Warning: No installation command for {name}, skipping.")
             continue
 
         print(f"Installing {name}...")
         try:
-            subprocess.run(install_cmd, shell=True, check=True)
+            subprocess.run(installation_command, shell=True, check=True)
         except subprocess.CalledProcessError as e:
             print(f"Warning: Failed to install {name}: {e}")
 

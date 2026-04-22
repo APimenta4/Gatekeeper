@@ -125,7 +125,7 @@ def invoke_scanning_docker_engine(
     ]
 
     if verbose:
-        cli_log("Attaching container shell...")
+        cli_log("Attaching engine's container shell...")
         sleep(2)
     else:
         docker_cmd.insert(3, "--quiet")
