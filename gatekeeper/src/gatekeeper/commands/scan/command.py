@@ -1,3 +1,4 @@
+import json
 import subprocess
 from datetime import datetime
 from pathlib import Path
@@ -6,13 +7,16 @@ from time import sleep
 import click
 from halo import Halo
 
-from gatekeeper.defaults import SCAN_ENGINE_FINDINGS_FILE_NAME
+from gatekeeper.defaults import SCAN_ENGINE_FINDINGS_FILE_NAME, TOOLS_CONFIG_PATH
+from gatekeeper.utils.dashboard import generate_html_dashboard
+from gatekeeper.utils.findings_parser import parse_findings
 from gatekeeper.utils.git import (
     get_git_root_path,
     get_git_tracked_files_current_dir,
     raise_if_in_not_git_repository,
 )
-from gatekeeper.utils.printer import CliException, cli_log
+from gatekeeper.utils.policy import evaluate_policy, load_policy_config
+from gatekeeper.utils.printer import CliException, LogLevel, cli_log
 from gatekeeper.utils.sast_tools import (
     SastTool,
     SpecificSastTool,
@@ -26,7 +30,12 @@ from gatekeeper.utils.sast_tools import (
     is_flag=True,
     help="Attach container shell for real-time scan visualization and debugging",
 )
-def scan(verbose: bool) -> None:
+@click.option(
+    "--no-report",
+    is_flag=True,
+    help="Skip generating the HTML report",
+)
+def scan(verbose: bool, no_report: bool) -> None:
     """Runs the SAST tools on the current repository immediately"""
     raise_if_in_not_git_repository()
     _create_gitignored_gatekeeper_directory_if_not_exists()
@@ -35,18 +44,35 @@ def scan(verbose: bool) -> None:
         Path(git_root_path) / ".gatekeeper" / SCAN_ENGINE_FINDINGS_FILE_NAME
     )
     sast_tools = select_sast_tools_based_on_codebase()
-    invoke_scanning_docker_engine(SCAN_ENGINE_FINDINGS_FILE_NAME, sast_tools, verbose)
+    invoke_scanning_docker_engine(SCAN_ENGINE_FINDINGS_FILE_NAME, sast_tools, git_root_path, verbose)
 
-    # do_things_with_log_file_like_print
-    # add policy checking
+    raw = json.loads(Path(findings_file_path).read_text(encoding="utf-8"))
+    findings = parse_findings(raw)
+    cli_log(f"Parsed {click.style(str(len(findings)), bold=True)} finding(s) across all tools")
 
-    # maybe_delete_files
+    policy = load_policy_config(TOOLS_CONFIG_PATH)
+    violations = evaluate_policy(findings, policy)
 
-    findings_path = Path(findings_file_path).expanduser().resolve()
-    cli_log(
-        f"{click.style('Scan completed!', fg='green', bold=True)} "
-        f"Check the findings file for details: {findings_path}"
-    )
+    if not no_report:
+        dashboard_path = Path(git_root_path) / ".gatekeeper" / "report.html"
+        generate_html_dashboard(findings, violations, dashboard_path)
+        cli_log(f"HTML report: {click.style(str(dashboard_path.resolve()), fg='cyan')}")
+
+    if violations:
+        cli_log(
+            f"{len(violations)} finding(s) violate the policy "
+            f"(fail_on_severity={click.style(policy.fail_on_severity, fg='red', bold=True)})",
+            LogLevel.ERROR,
+        )
+        for v in violations:
+            cli_log(
+                f"  [{click.style(v.severity, fg='red', bold=True)}] "
+                f"{v.tool} — {v.file}:{v.line} — {v.message}",
+                LogLevel.ERROR,
+            )
+        raise SystemExit(1)
+
+    cli_log(click.style("Scan completed — no policy violations!", fg="green", bold=True))
 
 
 def _create_gitignored_gatekeeper_directory_if_not_exists() -> None:
@@ -103,7 +129,7 @@ def _get_tools_from_extensions(
 
 
 def invoke_scanning_docker_engine(
-    findings_file_name: str, sast_tools: set[SastTool], verbose: bool = False
+    findings_file_name: str, sast_tools: set[SastTool], git_root_path: str, verbose: bool = False
 ) -> None:
     tool_names = ",".join(tool.name for tool in sast_tools)
 
@@ -116,7 +142,7 @@ def invoke_scanning_docker_engine(
         "run",
         "--rm",
         "-v",
-        f"{Path.cwd()}:/repo",
+        f"{git_root_path}:/repo",
         "gatekeeper-scanner",
         "--tools",
         tool_names,

@@ -4,6 +4,11 @@ FROM python:3.13-slim
 RUN apt-get update && apt-get install -y \
     git \
     curl \
+    default-jdk \
+    maven \
+    nodejs \
+    npm \
+    php-cli \
     && rm -rf /var/lib/apt/lists/*
 
 RUN pip install --no-cache-dir pyyaml

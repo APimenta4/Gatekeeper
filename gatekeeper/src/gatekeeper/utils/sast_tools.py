@@ -1,11 +1,11 @@
 from dataclasses import dataclass, fields
 from functools import cache
-from pathlib import Path
 from typing import Tuple
 
 import click
 import yaml
 
+from gatekeeper.defaults import TOOLS_CONFIG_PATH
 from gatekeeper.utils.printer import LogLevel, cli_log
 
 
@@ -49,8 +49,7 @@ def get_tools_from_config() -> Tuple[frozenset[SastTool], frozenset[SpecificSast
                 level=LogLevel.WARNING,
             )
 
-    config_path = Path(__file__).parent.parent.parent.parent / "tools-config.yaml"
-    with open(config_path, "r", encoding="utf-8") as f:
+    with open(TOOLS_CONFIG_PATH, "r", encoding="utf-8") as f:
         config = yaml.safe_load(f)
 
     generic_tools = set()
