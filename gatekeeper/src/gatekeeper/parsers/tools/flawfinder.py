@@ -14,11 +14,13 @@ class FlawfinderParser(ToolParser):
                 sev = SEVERITY_MEDIUM
             else:
                 sev = SEVERITY_HIGH
+            cwes = item.get("cwes") or []
             findings.append(Finding(
                 tool="Flawfinder",
                 file=item.get("filename", ""),
                 line=int(item.get("line", 0)),
                 severity=sev,
                 message=item.get("warning", ""),
+                cwe=cwes[0] if cwes else None,
             ))
         return findings

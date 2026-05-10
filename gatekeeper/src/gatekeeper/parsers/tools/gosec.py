@@ -9,11 +9,14 @@ class GosecParser(ToolParser):
         for issue in data.get("Issues", []) or []:
             raw = issue.get("severity", SEVERITY_MEDIUM).upper()
             sev = raw if raw in (SEVERITY_LOW, SEVERITY_MEDIUM, SEVERITY_HIGH) else SEVERITY_MEDIUM
+            cwe_obj = issue.get("cwe") or {}
+            cwe_id = cwe_obj.get("ID") if isinstance(cwe_obj, dict) else None
             findings.append(Finding(
                 tool="gosec",
                 file=issue.get("file", ""),
                 line=int(issue.get("line", 0)),
                 severity=sev,
                 message=issue.get("details", ""),
+                cwe=f"CWE-{cwe_id}" if cwe_id else None,
             ))
         return findings

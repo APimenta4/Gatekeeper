@@ -3,6 +3,7 @@ from pathlib import Path
 
 from gatekeeper.config.loader import GatekeeperConfig
 from gatekeeper.parsers.model import Finding
+from gatekeeper.policy.decision import Decision
 from gatekeeper.utils.sast_tools import SastTool
 
 
@@ -17,4 +18,5 @@ class ScanContext:
     findings_file_path: str = ""
     raw_findings: dict = field(default_factory=dict)
     findings: list[Finding] = field(default_factory=list)
+    decisions: list[Decision] = field(default_factory=list)
     violations: list[Finding] = field(default_factory=list)

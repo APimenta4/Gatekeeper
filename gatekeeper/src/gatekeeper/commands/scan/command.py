@@ -11,6 +11,7 @@ from gatekeeper.pipeline.filters import (
     ReportGenerationFilter,
     ToolSelectionFilter,
 )
+from gatekeeper.policy import Verdict
 from gatekeeper.utils.git import get_git_root_path, raise_if_in_not_git_repository
 from gatekeeper.utils.printer import LogLevel, cli_log
 
@@ -52,21 +53,40 @@ def scan(verbose: bool, no_report: bool) -> None:
 
     ctx = pipeline.run(ctx)
 
-    if ctx.violations:
-        cli_log(
-            f"{len(ctx.violations)} finding(s) violate the policy "
-            f"(fail_on_severity={click.style(ctx.config.policy.fail_on_severity, fg='red', bold=True)})",
-            LogLevel.ERROR,
-        )
-        for v in ctx.violations:
+    blocked = [d for d in ctx.decisions if d.verdict == Verdict.BLOCK]
+    warned = [d for d in ctx.decisions if d.verdict == Verdict.WARN]
+
+    if warned:
+        for d in warned:
+            rules_label = ", ".join(r.id for r in d.matched_rules) or "—"
+            cwe_label = f" [{d.finding.cwe}]" if d.finding.cwe else ""
             cli_log(
-                f"  [{click.style(v.severity, fg='red', bold=True)}] "
-                f"{v.tool} — {v.file}:{v.line} — {v.message}",
+                f"  [WARN]{cwe_label} {d.finding.tool} — "
+                f"{d.finding.file}:{d.finding.line} ({rules_label}) — {d.finding.message}",
+                LogLevel.WARNING,
+            )
+
+    if blocked:
+        for d in blocked:
+            rules_label = ", ".join(r.id for r in d.matched_rules) or "—"
+            cwe_label = f" [{d.finding.cwe}]" if d.finding.cwe else ""
+            cli_log(
+                f"  [BLOCK]{cwe_label} {d.finding.tool} — "
+                f"{d.finding.file}:{d.finding.line} ({rules_label}) — {d.finding.message}",
                 LogLevel.ERROR,
             )
+        cli_log(
+            f"{len(blocked)} finding(s) BLOCKED by policy — fix before committing.",
+            LogLevel.ERROR,
+        )
         raise SystemExit(1)
 
-    cli_log(click.style("Scan completed — no policy violations!", fg="green", bold=True))
+    if warned:
+        cli_log(
+            click.style(f"Scan completed — {len(warned)} warning(s), no blockers.", fg="yellow", bold=True)
+        )
+    else:
+        cli_log(click.style("Scan completed — no policy violations!", fg="green", bold=True))
 
 
 def _create_gitignored_gatekeeper_directory_if_not_exists(git_root: Path) -> None:

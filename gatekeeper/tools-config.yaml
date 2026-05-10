@@ -56,8 +56,3 @@ specific_tools:
       json.dump(findings, open('{output_file}', 'w'))
       " || echo '[]' > {output_file}) || true
 
-policy:
-  fail_on_severity: HIGH
-  max_findings: null
-  ignored_tools: []
-  ignored_files: []

@@ -13,3 +13,4 @@ class Finding:
     line: int
     severity: str
     message: str
+    cwe: str | None = None

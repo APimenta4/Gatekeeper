@@ -19,11 +19,13 @@ class TrivyParser(ToolParser):
             target = result.get("Target", "")
             for vuln in result.get("Vulnerabilities", []) or []:
                 raw = vuln.get("Severity", "MEDIUM").upper()
+                cwe_ids = vuln.get("CweIDs") or []
                 findings.append(Finding(
                     tool="Trivy",
                     file=target,
                     line=0,
                     severity=_SEVERITY_MAP.get(raw, SEVERITY_MEDIUM),
                     message=f"{vuln.get('VulnerabilityID', '')} {vuln.get('PkgName', '')}: {vuln.get('Description', '')}",
+                    cwe=cwe_ids[0] if cwe_ids else None,
                 ))
         return findings
