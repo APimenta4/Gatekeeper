@@ -13,6 +13,7 @@ class ScanContext:
     config: GatekeeperConfig
     verbose: bool
     no_report: bool
+    show_details: bool = False
     # populated by filters
     sast_tools: set[SastTool] = field(default_factory=set)
     findings_file_path: str = ""

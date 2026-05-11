@@ -11,14 +11,26 @@
   .header p {{ margin: 4px 0 0; opacity: 0.7; font-size: 0.9rem; }}
   .container {{ max-width: 1100px; margin: 0 auto; padding: 24px 32px; }}
   .summary {{ display: flex; gap: 16px; margin-bottom: 24px; flex-wrap: wrap; }}
+  .filters {{ display: flex; gap: 16px; margin-bottom: 16px; flex-wrap: wrap; }}
+  .filter {{ background: #fff; border-radius: 8px; padding: 12px 16px; box-shadow: 0 1px 4px rgba(0,0,0,.08); }}
+  .filter label {{ display: block; font-size: 0.75rem; color: #7f8c8d; text-transform: uppercase; letter-spacing: .05em; margin-bottom: 6px; }}
+  .filter select {{ padding: 8px 10px; border: 1px solid #ecf0f1; border-radius: 6px; background: #fff; color: #2c3e50; min-width: 220px; font: inherit; font-size: 0.88rem; }}
+  .filter input {{ padding: 8px 10px; border: 1px solid #ecf0f1; border-radius: 6px; background: #fff; color: #2c3e50; min-width: 220px; font: inherit; font-size: 0.88rem; }}
   .card {{ background: #fff; border-radius: 8px; padding: 16px 24px; box-shadow: 0 1px 4px rgba(0,0,0,.08); min-width: 130px; }}
   .card .value {{ font-size: 2rem; font-weight: 700; }}
   .card .label {{ font-size: 0.8rem; color: #7f8c8d; text-transform: uppercase; letter-spacing: .05em; }}
   .violations-banner {{ background: #fdecea; border-left: 4px solid #c0392b; padding: 12px 16px; border-radius: 4px; margin-bottom: 20px; font-weight: 600; color: #c0392b; }}
   .clean-banner {{ background: #eafaf1; border-left: 4px solid #27ae60; padding: 12px 16px; border-radius: 4px; margin-bottom: 20px; font-weight: 600; color: #27ae60; }}
-  table {{ width: 100%; border-collapse: collapse; background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,.08); }}
+  .table-wrap {{ overflow-x: auto; -webkit-overflow-scrolling: touch; }}
+  table {{ width: 100%; table-layout: auto; border-collapse: collapse; background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,.08); }}
   th {{ background: #34495e; color: #fff; text-align: left; padding: 12px 14px; font-size: 0.82rem; text-transform: uppercase; letter-spacing: .05em; }}
   td {{ padding: 10px 14px; border-bottom: 1px solid #ecf0f1; font-size: 0.88rem; word-break: break-word; }}
+  th:nth-child(1), td:nth-child(1) {{ width: 110px; white-space: nowrap; }}
+  th:nth-child(2), td:nth-child(2) {{ width: 120px; }}
+  th:nth-child(3), td:nth-child(3) {{ width: 90px; white-space: nowrap; }}
+  th:nth-child(4), td:nth-child(4) {{ width: 260px; }}
+  th:nth-child(5), td:nth-child(5) {{ width: 70px; white-space: nowrap; }}
+  th:nth-child(6), td:nth-child(6) {{ white-space: pre-wrap; overflow-wrap: anywhere; word-break: break-word; }}
   tr:last-child td {{ border-bottom: none; }}
   tr:hover td {{ background: #f9fbfc; }}
   .badge {{ display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 0.75rem; font-weight: 700; color: #fff; }}
@@ -41,17 +53,74 @@
     <div class="card"><div class="value" style="color:{violations_color}">{violations}</div><div class="label">Policy Violations</div></div>
   </div>
   {banner}
+  <div class="filters">
+    <div class="filter">
+      <label for="severityFilter">Severity</label>
+      <select id="severityFilter">
+        <option value="ALL">All severities</option>
+        <option value="CRITICAL">CRITICAL</option>
+        <option value="HIGH">HIGH</option>
+        <option value="MEDIUM">MEDIUM</option>
+        <option value="LOW">LOW</option>
+      </select>
+    </div>
+    <div class="filter">
+      <label for="extFilter">File extension</label>
+      <select id="extFilter">
+        <option value="ALL">All extensions</option>
+        {ext_options}
+      </select>
+    </div>
+    <div class="filter">
+      <label for="cweFilter">CWE</label>
+      <select id="cweFilter">
+        <option value="ALL">All CWEs</option>
+        {cwe_options}
+      </select>
+    </div>
+  </div>
+  <div class="table-wrap">
   <table>
     <thead>
       <tr>
-        <th>Severity</th><th>Tool</th><th>File</th><th>Line</th><th>Message</th>
+        <th>Severity</th><th>Tool</th><th>CWE</th><th>File</th><th>Line</th><th>Message</th>
       </tr>
     </thead>
     <tbody>
 {rows}
     </tbody>
   </table>
-  <div class="footer">Gatekeeper &mdash; MESW SES 2025/2026 Group 3</div>
+  </div>
+  <script>
+    (function() {{
+      var severityEl = document.getElementById('severityFilter');
+      var extEl = document.getElementById('extFilter');
+      var cweEl = document.getElementById('cweFilter');
+
+      function applyFilters() {{
+        var sev = severityEl.value;
+        var ext = extEl.value;
+        var cwe = cweEl.value;
+        var rows = document.querySelectorAll('tbody tr[data-severity]');
+
+        rows.forEach(function(row) {{
+          var rowSev = row.getAttribute('data-severity') || '';
+          var rowExt = row.getAttribute('data-ext') || '';
+          var rowCwe = row.getAttribute('data-cwe') || '';
+          var sevOk = (sev === 'ALL') || (rowSev === sev);
+          var extOk = (ext === 'ALL') || (rowExt === ext);
+          var cweOk = (cwe === 'ALL') || (cwe === '__NONE__' && rowCwe === '') || (rowCwe === cwe);
+          row.style.display = (sevOk && extOk && cweOk) ? '' : 'none';
+        }});
+      }}
+
+      severityEl.addEventListener('change', applyFilters);
+      extEl.addEventListener('change', applyFilters);
+      cweEl.addEventListener('change', applyFilters);
+      applyFilters();
+    }})();
+  </script>
+  <div class="footer">Gatekeeper - MESW SES 2025/2026 Group 3</div>
 </div>
 </body>
 </html>

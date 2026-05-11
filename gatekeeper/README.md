@@ -38,6 +38,13 @@ cd /path/to/your/repo
 gatekeeper setup
 ```
 
+By default, the hook runs `gatekeeper scan` with finding messages enabled.
+If you prefer a cleaner pre-commit output, install the hook like this:
+
+```bash
+gatekeeper setup --no-details
+```
+
 From that point on, `gatekeeper scan` runs automatically on every `git commit`. The commit is blocked if any finding is classified as **BLOCK** by the policy engine.
 
 ### Run a scan on demand
@@ -46,6 +53,7 @@ From that point on, `gatekeeper scan` runs automatically on every `git commit`. 
 gatekeeper scan                # standard output
 gatekeeper scan --verbose      # stream live Docker output to the terminal
 gatekeeper scan --no-report    # skip generating the HTML dashboard
+gatekeeper scan --no-details   # cleaner terminal output (no per-finding messages)
 ```
 
 Exit code `0` = no blockers. Exit code `1` = at least one finding was BLOCKED.
