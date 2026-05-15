@@ -107,6 +107,7 @@ def _print_terminal_report(ctx: ScanContext) -> None:
                 show_details=ctx.show_details,
             )
         )
+        click.echo("")
 
     for d in warned:
         f = d.finding
@@ -120,16 +121,19 @@ def _print_terminal_report(ctx: ScanContext) -> None:
                 show_details=ctx.show_details,
             )
         )
+        click.echo("")
 
     if allowed:
         severities = {d.finding.severity for d in allowed}
         severity_label = "/".join(sorted(severities))
         click.echo(
-            f"ℹ️ {_style_verdict_label('ALLOWED')} {len(allowed)} "
+            f"ℹ️  {_style_verdict_label('ALLOWED')} {len(allowed)} "
             f"{_plural(len(allowed), 'finding')}: severity {severity_label}, policy set to allow"
         )
+        click.echo("")
     elif not decisions:
-        click.echo(f"ℹ️ {_style_verdict_label('ALLOWED')} 0 findings")
+        click.echo(f"ℹ️  {_style_verdict_label('ALLOWED')} 0 findings")
+        click.echo("")
 
     click.echo("")
 

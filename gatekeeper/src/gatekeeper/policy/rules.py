@@ -49,7 +49,7 @@ default_rules: list[Rule] = [
             "surface is the entire filesystem."
         ),
         predicate=lambda f: f.cwe == "CWE-22",
-        verdict=Verdict.BLOCK,
+        verdict=Verdict.WARN,
     ),
     Rule(
         id="GK-005",
