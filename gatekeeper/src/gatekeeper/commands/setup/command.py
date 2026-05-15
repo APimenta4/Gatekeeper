@@ -9,26 +9,34 @@ from gatekeeper.utils.git import get_git_root_path, raise_if_in_not_git_reposito
 from gatekeeper.utils.printer import LogLevel, cli_log
 
 
-def setup() -> None:
+@click.option(
+    "--details/--no-details",
+    default=True,
+    show_default=True,
+    help="Include per-finding messages in the pre-commit hook output",
+)
+def setup(details: bool) -> None:
     """Sets up the current repository by installing the pre-commit hook"""
     raise_if_in_not_git_repository()
-    _setup_gatekeeper_precommit_hook()
+    _setup_gatekeeper_precommit_hook(details=details)
 
 
-def _setup_gatekeeper_precommit_hook() -> None:
+def _setup_gatekeeper_precommit_hook(*, details: bool) -> None:
     cli_log("Setting up Gatekeeper pre-commit hook...")
-    _create_precommit_config()
+    _create_precommit_config(details=details)
     _run_precommit_install()
 
 
-def _create_precommit_config() -> None:
+def _create_precommit_config(*, details: bool) -> None:
     git_root_path = get_git_root_path()
     precommit_file_path = Path(git_root_path) / ".pre-commit-config.yaml"
+
+    entry = "gatekeeper scan" if details else "gatekeeper scan --no-details"
 
     gatekeeper_hook = {
         "id": "gatekeeper",
         "name": "Gatekeeper Security Scanner",
-        "entry": "gatekeeper scan",
+        "entry": entry,
         "language": "system",
         "stages": ["pre-commit"],
         "pass_filenames": False,
@@ -55,10 +63,14 @@ def _create_precommit_config() -> None:
             repos.append(local_repo)
 
         hooks = local_repo.get("hooks", [])
-        if any(hook.get("id") == "gatekeeper" for hook in hooks):
+        existing_hook = next((hook for hook in hooks if hook.get("id") == "gatekeeper"), None)
+        if existing_hook is not None:
+            existing_hook["entry"] = entry
+            config["repos"] = repos
+            precommit_file_path.write_text(yaml.dump(config))
             cli_log(
                 f"Gatekeeper hook already exists in {click.style('.pre-commit-config.yaml', fg='green', bold=True)} "
-                f"file, attempting to reinstall...",
+                f"file, updated its entry and attempting to reinstall...",
                 LogLevel.WARNING,
             )
             _run_precommit_install(True)

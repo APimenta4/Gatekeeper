@@ -27,8 +27,7 @@ def _warn_for_missing_dependencies() -> None:
         "docker",
         "git",
         "pre-commit",
-        "test_warning",
-    ]  # test_warning just to verify checks and logs
+    ]
     missing_tools: List[str] = []
 
     for tool in required_tools:
