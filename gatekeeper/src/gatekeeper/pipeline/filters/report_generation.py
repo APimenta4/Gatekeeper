@@ -29,9 +29,6 @@ _WARNING_FG = _hex_to_rgb("#f1c40f")
 
 _CWE_FG = _hex_to_rgb("#9b59b6")  # purple-ish
 
-def _style_padded(text: str, width: int, *, fg: str | tuple[int, int, int] | None = None) -> str:
-    padded = f"{text:<{width}}"
-    return click.style(padded, fg=fg) if fg else padded
 
 
 def _style_verdict_label(label: str) -> str:
@@ -44,35 +41,6 @@ def _style_verdict_label(label: str) -> str:
     return label
 
 
-def _style_verdict_label_padded(label: str, width: int) -> str:
-    padded = f"{label:<{width}}"
-    if label == "BLOCKED":
-        return click.style(padded, fg=_BLOCKED_FG, bold=True)
-    if label == "WARNING":
-        return click.style(padded, fg=_WARNING_FG, bold=True)
-    if label == "ALLOWED":
-        return click.style(padded, fg="blue", bold=True)
-    return padded
-
-
-def _format_finding_line(
-    *,
-    prefix: str,
-    label: str,
-    cwe: str | None,
-    location: str,
-    message: str,
-    show_details: bool,
-) -> str:
-    cwe_text = f"[{_normalize_cwe(cwe)}]" if cwe else ""
-    styled_cwe = _style_padded(cwe_text, 13, fg=_CWE_FG) if cwe_text else _style_padded("", 12)
-    styled_location = _style_padded(location, 20, fg='cyan')
-    styled_label = _style_verdict_label_padded(label, 7)
-    if not show_details:
-        return f"{prefix}{styled_label}  {styled_cwe}  {styled_location}"
-    return f"{prefix}{styled_label}  {styled_cwe}  {styled_location}  {message}"
-
-
 def _plural(n: int, singular: str, plural: str | None = None) -> str:
     if n == 1:
         return singular
@@ -81,6 +49,16 @@ def _plural(n: int, singular: str, plural: str | None = None) -> str:
 
 def _print_terminal_report(ctx: ScanContext) -> None:
     decisions = ctx.decisions or []
+
+    def group_by_vulnerability(items):
+        groups = {}
+        for d in items:
+            key = (d.finding.cwe, d.finding.message)
+            if key not in groups:
+                groups[key] = []
+            groups[key].append(d)
+        return groups
+
     blocked = [d for d in decisions if d.verdict == Verdict.BLOCK]
     warned = [d for d in decisions if d.verdict == Verdict.WARN]
     allowed = [d for d in decisions if d.verdict == Verdict.ALLOW]
@@ -95,32 +73,32 @@ def _print_terminal_report(ctx: ScanContext) -> None:
     click.echo(click.style("=========================================", fg="yellow"))
     click.echo("")
 
-    for d in blocked:
-        f = d.finding
-        click.echo(
-            _format_finding_line(
-                prefix="❌ ",
-                label="BLOCKED",
-                cwe=f.cwe,
-                location=f"{f.file}:{f.line}",
-                message=f.message,
-                show_details=ctx.show_details,
-            )
-        )
+    blocked_groups = group_by_vulnerability(blocked)
+    for (cwe, message), items in blocked_groups.items():
+        cwe_text = f"[{_normalize_cwe(cwe)}]" if cwe else ""
+        styled_cwe = click.style(f"{cwe_text:<13}", fg=_CWE_FG) if cwe_text else f"{'':<13}"
+        click.echo(f"❌ {click.style('BLOCKED', fg=_BLOCKED_FG, bold=True)}  {styled_cwe}")
+        
+        for d in items:
+            f = d.finding
+            click.echo(f"  ➜ {click.style(f'{f.file}:{f.line}', fg='cyan')}")
+        
+        if ctx.show_details:
+            click.echo(f"  {message}")
         click.echo("")
 
-    for d in warned:
-        f = d.finding
-        click.echo(
-            _format_finding_line(
-                prefix="⚠️  ",
-                label="WARNING",
-                cwe=f.cwe,
-                location=f"{f.file}:{f.line}",
-                message=f.message,
-                show_details=ctx.show_details,
-            )
-        )
+    warned_groups = group_by_vulnerability(warned)
+    for (cwe, message), items in warned_groups.items():
+        cwe_text = f"[{_normalize_cwe(cwe)}]" if cwe else ""
+        styled_cwe = click.style(f"{cwe_text:<13}", fg=_CWE_FG) if cwe_text else f"{'':<13}"
+        click.echo(f"⚠️  {click.style('WARNING', fg=_WARNING_FG, bold=True)}  {styled_cwe}")
+        
+        for d in items:
+            f = d.finding
+            click.echo(f"  ➜ {click.style(f'{f.file}:{f.line}', fg='cyan')}")
+        
+        if ctx.show_details:
+            click.echo(f"  {message}")
         click.echo("")
 
     if allowed:
