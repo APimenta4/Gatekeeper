@@ -1,0 +1,282 @@
+{
+  "SchemaVersion": 2,
+  "Trivy": {
+    "Version": "0.71.0"
+  },
+  "ReportID": "019ea859-18ce-7751-a44f-be7f03d93e5c",
+  "CreatedAt": "2026-06-08T17:47:51.886485727Z",
+  "ArtifactID": "sha256:90a468ee8cf9374ce079a080efbdffba7ac563edd2c716e41a9cbd564dec6f19",
+  "ArtifactName": ".",
+  "ArtifactType": "repository",
+  "Metadata": {
+    "RepoURL": "https://github.com/digininja/DVWA/",
+    "Branch": "master",
+    "Commit": "d45ba3c4e7efa7f023f25f58ab4af9912c887057",
+    "CommitMsg": "added zip and 7zip to the docker requirements",
+    "Author": "Robin \u003crobin@digi.ninja\u003e",
+    "Committer": "Robin \u003crobin@digi.ninja\u003e"
+  },
+  "Results": [
+    {
+      "Target": "vulnerabilities/api/composer.lock",
+      "Class": "lang-pkgs",
+      "Type": "composer",
+      "Packages": [
+        {
+          "ID": "zircote/swagger-php@4.11.1",
+          "Name": "zircote/swagger-php",
+          "Identifier": {
+            "PURL": "pkg:composer/zircote/swagger-php@4.11.1",
+            "UID": "8e4dea42adadda3b"
+          },
+          "Version": "4.11.1",
+          "Licenses": [
+            "Apache-2.0"
+          ],
+          "Relationship": "direct",
+          "DependsOn": [
+            "psr/log@3.0.2",
+            "symfony/deprecation-contracts@v3.5.1",
+            "symfony/finder@v7.2.2",
+            "symfony/yaml@v7.2.3"
+          ],
+          "Locations": [
+            {
+              "StartLine": 341,
+              "EndLine": 421
+            }
+          ],
+          "AnalyzedBy": "composer"
+        },
+        {
+          "ID": "psr/log@3.0.2",
+          "Name": "psr/log",
+          "Identifier": {
+            "PURL": "pkg:composer/psr/log@3.0.2",
+            "UID": "16646a3679e907b6"
+          },
+          "Version": "3.0.2",
+          "Licenses": [
+            "MIT"
+          ],
+          "Indirect": true,
+          "Relationship": "indirect",
+          "Locations": [
+            {
+              "StartLine": 9,
+              "EndLine": 58
+            }
+          ],
+          "AnalyzedBy": "composer"
+        },
+        {
+          "ID": "symfony/deprecation-contracts@v3.5.1",
+          "Name": "symfony/deprecation-contracts",
+          "Identifier": {
+            "PURL": "pkg:composer/symfony/deprecation-contracts@v3.5.1",
+            "UID": "fb40bb7147262ce9"
+          },
+          "Version": "v3.5.1",
+          "Licenses": [
+            "MIT"
+          ],
+          "Indirect": true,
+          "Relationship": "indirect",
+          "Locations": [
+            {
+              "StartLine": 59,
+              "EndLine": 125
+            }
+          ],
+          "AnalyzedBy": "composer"
+        },
+        {
+          "ID": "symfony/finder@v7.2.2",
+          "Name": "symfony/finder",
+          "Identifier": {
+            "PURL": "pkg:composer/symfony/finder@v7.2.2",
+            "UID": "48b4ad843bd03127"
+          },
+          "Version": "v7.2.2",
+          "Licenses": [
+            "MIT"
+          ],
+          "Indirect": true,
+          "Relationship": "indirect",
+          "Locations": [
+            {
+              "StartLine": 126,
+              "EndLine": 189
+            }
+          ],
+          "AnalyzedBy": "composer"
+        },
+        {
+          "ID": "symfony/polyfill-ctype@v1.31.0",
+          "Name": "symfony/polyfill-ctype",
+          "Identifier": {
+            "PURL": "pkg:composer/symfony/polyfill-ctype@v1.31.0",
+            "UID": "341e1a7667bc8074"
+          },
+          "Version": "v1.31.0",
+          "Licenses": [
+            "MIT"
+          ],
+          "Indirect": true,
+          "Relationship": "indirect",
+          "Locations": [
+            {
+              "StartLine": 190,
+              "EndLine": 268
+            }
+          ],
+          "AnalyzedBy": "composer"
+        },
+        {
+          "ID": "symfony/yaml@v7.2.3",
+          "Name": "symfony/yaml",
+          "Identifier": {
+            "PURL": "pkg:composer/symfony/yaml@v7.2.3",
+            "UID": "7707181e904a874b"
+          },
+          "Version": "v7.2.3",
+          "Licenses": [
+            "MIT"
+          ],
+          "Indirect": true,
+          "Relationship": "indirect",
+          "DependsOn": [
+            "symfony/deprecation-contracts@v3.5.1",
+            "symfony/polyfill-ctype@v1.31.0"
+          ],
+          "Locations": [
+            {
+              "StartLine": 269,
+              "EndLine": 340
+            }
+          ],
+          "AnalyzedBy": "composer"
+        }
+      ],
+      "Vulnerabilities": [
+        {
+          "VulnerabilityID": "CVE-2026-45133",
+          "PkgID": "symfony/yaml@v7.2.3",
+          "PkgName": "symfony/yaml",
+          "PkgIdentifier": {
+            "PURL": "pkg:composer/symfony/yaml@v7.2.3",
+            "UID": "7707181e904a874b"
+          },
+          "InstalledVersion": "v7.2.3",
+          "FixedVersion": "5.1.0, 6.1.0, 6.2.0, 7.3.0, 5.0.0, 6.3.0, 6.4.0, 6.4.40, 7.1.0, 8.0.12, 4.0.0, 5.2.0, 5.4.52, 7.2.0, 7.4.0, 7.4.12, 3.0.0, 5.3.0, 5.4.0",
+          "Status": "fixed",
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2026-45133",
+          "DataSource": {
+            "ID": "php-security-advisories",
+            "Name": "PHP Security Advisories Database",
+            "URL": "https://github.com/FriendsOfPHP/security-advisories"
+          },
+          "Fingerprint": "sha256:5ddf1beae493e72c14fccf8830b0d9207bd3ba1df575208d61926ee301e7b912",
+          "Title": "CVE-2026-45133: YAML Parser Stack Exhaustion via Unbounded Recursion in Nested Blocks, Sequences, and Mappings",
+          "Description": "### Description\n\n`Symfony\\Component\\Yaml\\Parser` is the entry point for parsing YAML strings into PHP values via `Yaml::parse()`. When the parser is exposed to attacker-controlled input, deeply nested mappings or sequences cause both the block-level (`Parser::parseBlock()`) and inline (`Inline::parseSequence()` / `Inline::parseMapping()`) parsers to recurse without a depth limit. A crafted document exhausts the PHP stack and crashes the worker.\n\n### Resolution\n\nThe `Parser` now tracks recursion depth in a shared `ParserState` object across both block-level and inline parsing, with a default limit of **128**. The limit is configurable via a new `$maxNestingLevel` argument on `Parser::__construct()`, `Yaml::parse()` and `Yaml::parseFile()`.\n\nThe patch for this issue is available [here](https://github.com/symfony/symfony/commit/914f427ed9630ddb3904dafba763e53d9f133fe3) for branch 5.4.\n\n### Credits\n\nSymfony would like to thank Pietro Tirenna (Shielder) for reporting the issue and Nicolas Grekas for fixing it.",
+          "Severity": "LOW",
+          "VendorSeverity": {
+            "ghsa": 1
+          },
+          "CVSS": {
+            "ghsa": {
+              "V40Vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:L/SC:N/SI:N/SA:N/E:U",
+              "V40Score": 2.7
+            }
+          },
+          "References": [
+            "https://github.com/FriendsOfPHP/security-advisories/blob/master/symfony/symfony/CVE-2026-45133.yaml",
+            "https://github.com/FriendsOfPHP/security-advisories/blob/master/symfony/yaml/CVE-2026-45133.yaml",
+            "https://github.com/symfony/symfony",
+            "https://github.com/symfony/symfony/commit/914f427ed9630ddb3904dafba763e53d9f133fe3",
+            "https://github.com/symfony/symfony/security/advisories/GHSA-c2p3-7m5p-cv8x",
+            "https://symfony.com/cve-2026-45133"
+          ]
+        },
+        {
+          "VulnerabilityID": "CVE-2026-45304",
+          "PkgID": "symfony/yaml@v7.2.3",
+          "PkgName": "symfony/yaml",
+          "PkgIdentifier": {
+            "PURL": "pkg:composer/symfony/yaml@v7.2.3",
+            "UID": "7707181e904a874b"
+          },
+          "InstalledVersion": "v7.2.3",
+          "FixedVersion": "4.0.0, 5.1.0, 5.4.0, 7.4.0, 7.4.12, 5.2.0, 5.4.52, 7.2.0, 7.3.0, 6.4.40, 7.1.0, 5.0.0, 5.3.0, 6.1.0, 6.2.0, 6.4.0, 8.0.12, 3.0.0, 6.3.0",
+          "Status": "fixed",
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2026-45304",
+          "DataSource": {
+            "ID": "php-security-advisories",
+            "Name": "PHP Security Advisories Database",
+            "URL": "https://github.com/FriendsOfPHP/security-advisories"
+          },
+          "Fingerprint": "sha256:889c090698fcea97fabeb0d64cba51ecf4dde732c1fb13081d110cda41922616",
+          "Title": "CVE-2026-45304: YAML Parser Exponential Memory Allocation via Recursive Collection-Alias Expansion (\"Billion Laughs\")",
+          "Description": "### Description\n\n`Symfony\\Component\\Yaml\\Parser` resolves YAML aliases (`*anchor`) during parsing. Aliases that reference *collections* (arrays, `stdClass`, `TaggedValue`-wrapped collections) can themselves point to other collections containing aliases, creating exponential expansion at resolution time. A small input can blow up into a multi-gigabyte structure and exhaust memory: the classic \"Billion Laughs\" denial-of-service against any parser exposed to untrusted YAML.\n\n### Resolution\n\nThe `Parser` now counts collection alias resolutions in a shared `ParserState` object, with a default limit of **128**, following the [SnakeYAML model](https://github.com/snakeyaml/snakeyaml/blob/master/src/main/java/org/yaml/snakeyaml/LoaderOptions.java). Scalar aliases remain unrestricted since they cannot drive exponential growth. The limit is configurable via a new `$maxAliasesForCollections` argument on `Parser::__construct()`, `Yaml::parse()` and `Yaml::parseFile()`. A new `Yaml::PARSE_EXCEPTION_ON_ALIAS` flag also rejects all aliases outright when parsing fully untrusted input.\n\nThe patch for this issue is available [here](https://github.com/symfony/symfony/commit/e77391b2e4f18821198f010d573674c8ed4a970a) for branch 5.4.\n\n### Credits\n\nSymfony would like to thank Pietro Tirenna (Shielder) for reporting the issue and Nicolas Grekas for fixing it.",
+          "Severity": "LOW",
+          "VendorSeverity": {
+            "ghsa": 1
+          },
+          "CVSS": {
+            "ghsa": {
+              "V40Vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:L/SC:N/SI:N/SA:N/E:U",
+              "V40Score": 2.7
+            }
+          },
+          "References": [
+            "https://github.com/FriendsOfPHP/security-advisories/blob/master/symfony/symfony/CVE-2026-45304.yaml",
+            "https://github.com/FriendsOfPHP/security-advisories/blob/master/symfony/yaml/CVE-2026-45304.yaml",
+            "https://github.com/symfony/symfony",
+            "https://github.com/symfony/symfony/commit/e77391b2e4f18821198f010d573674c8ed4a970a",
+            "https://github.com/symfony/symfony/security/advisories/GHSA-4qpc-3hr4-r2p4",
+            "https://symfony.com/cve-2026-45304"
+          ]
+        },
+        {
+          "VulnerabilityID": "CVE-2026-45305",
+          "PkgID": "symfony/yaml@v7.2.3",
+          "PkgName": "symfony/yaml",
+          "PkgIdentifier": {
+            "PURL": "pkg:composer/symfony/yaml@v7.2.3",
+            "UID": "7707181e904a874b"
+          },
+          "InstalledVersion": "v7.2.3",
+          "FixedVersion": "3.0.0, 4.0.0, 5.2.0, 5.4.0, 6.1.0, 6.3.0, 6.4.40, 5.1.0, 5.4.52, 7.4.0, 8.0.12, 5.0.0, 7.2.0, 7.4.12, 5.3.0, 6.2.0, 6.4.0, 7.1.0, 7.3.0",
+          "Status": "fixed",
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2026-45305",
+          "DataSource": {
+            "ID": "php-security-advisories",
+            "Name": "PHP Security Advisories Database",
+            "URL": "https://github.com/FriendsOfPHP/security-advisories"
+          },
+          "Fingerprint": "sha256:3f9fe85bfd543ebfaae6581933bd665225695103656ebe177c28abea1d7fd661",
+          "Title": "CVE-2026-45305: YAML Parser ReDoS via Catastrophic Backtracking in Parser::cleanup() Regex",
+          "Description": "### Description\n\n`Symfony\\Component\\Yaml\\Parser::cleanup()` strips the optional `%YAML` directive header, leading comments, and document start/end markers before parsing. The original regexes contained overlapping quantifiers, most notably `'#^%YAML[: ][\\d.]+.*\\n#u'`, whose `[\\d.]+` and `.*` overlap on the dot, that exhibit catastrophic backtracking on crafted input. A single oversized `%YAML` directive header (or comment / document-marker line) makes the parser hang for an arbitrarily long time, denying service.\n\n### Resolution\n\nThe four regexes in `Parser::cleanup()` (YAML directive header, leading comments, document-start marker, document-end marker) have been rewritten with possessive quantifiers and unambiguous character classes so backtracking cannot occur.\n\nThe patch for this issue is available [here](https://github.com/symfony/symfony/commit/9749cd43c5e09b3735093623670b21b9d8a056cb) for branch 5.4.\n\n### Credits\n\nSymfony would like to thank Pietro Tirenna (Shielder) for reporting the issue and Nicolas Grekas for fixing it.",
+          "Severity": "LOW",
+          "VendorSeverity": {
+            "ghsa": 1
+          },
+          "CVSS": {
+            "ghsa": {
+              "V40Vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:L/SC:N/SI:N/SA:N/E:U",
+              "V40Score": 2.7
+            }
+          },
+          "References": [
+            "https://github.com/FriendsOfPHP/security-advisories/blob/master/symfony/symfony/CVE-2026-45305.yaml",
+            "https://github.com/FriendsOfPHP/security-advisories/blob/master/symfony/yaml/CVE-2026-45305.yaml",
+            "https://github.com/symfony/symfony",
+            "https://github.com/symfony/symfony/commit/9749cd43c5e09b3735093623670b21b9d8a056cb",
+            "https://github.com/symfony/symfony/security/advisories/GHSA-9frc-8383-795m",
+            "https://symfony.com/cve-2026-45305"
+          ]
+        }
+      ]
+    }
+  ]
+}
