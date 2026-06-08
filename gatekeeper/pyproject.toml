@@ -4,7 +4,10 @@ version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
 authors = [
-    { name = "Afonso Pimenta", email = "afonsocpimenta04@gmail.com" }
+    { name = "Afonso da Cruz Pimenta" },
+    { name = "Gonçalo Araújo Guimarães Cardoso Sampaio" },
+    { name = "Gonçalo de Almeida Pinto e Morais de Castro" },
+    { name = "José Pedro Pereira da Costa" }
 ]
 requires-python = ">=3.13"
 dependencies = [
