@@ -190,6 +190,7 @@ A policy violation does not simply mean that the scanner reported an issue but t
 
 #### 5.3 Metrics
 
+WIP
 ### 6. Developer Experience and Performance
 
 Gatekeeper was designed to be unobtrusive and fast, integrating seamlessly into the developer workflow:
