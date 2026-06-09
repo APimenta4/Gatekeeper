@@ -178,13 +178,17 @@ A policy violation does not simply mean that the scanner reported an issue but t
 | Low findings      |     4 |
 | Policy violations |    26 |
 
-#### 5.2 Ground Truth Coverage
+#### 5.2 Gatekeeper Findings Classification
 
-#### 5.3 Gatekeeper Findings Classification
+<!-- Detection: ✅ Correct (TP) / ❌ False Positive / Negative -->
+| Finding | Real vulnerability? | Gatekeeper decision | Detection |
+|-|:-:|:-:|:-:|
+| **CWE-78** in `.github/workflows/docker-image.yml` | Yes | ⛔ Blocked | FP / TP |
+| **CWE-697** in `login.php` | Yes | 🆗 Allowed | FP / TP |
+| **CWE-200** in `phpinfo.php` | Yes | 🆗 Allowed | FP / TP |
+| **CWE-94** in  `vulnerabilities/api/src/HealthController.php` | Yes | 🆗 Allowed | FP / TP |
 
-#### 5.4 Metrics
-
-#### 5.5 False Positive and False Negative Analysis
+#### 5.3 Metrics
 
 ### 6. Developer Experience and Performance
 

@@ -17,7 +17,7 @@ It is a CLI tool that we developed and is able to run multiple SAST tools at onc
 
 ## Evaluation Report
 
-The project's evaluation report can be found in the [REPORT](REPORT.md) file. It contains information about the design of the tool, the achieved results (with FP/FN analysis tables) and lessons learnt during its development. The report also includes a video demonstrating the tool's functionalities.
+The project's evaluation report can be found in the [REPORT](report/REPORT.md) file. It contains information about the design of the tool, the achieved results (with FP/FN analysis tables) and lessons learnt during its development. The report also includes a video demonstrating the tool's functionalities.
 
 ## First steps and how to use
 
