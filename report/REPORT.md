@@ -110,7 +110,11 @@ The policy engine was designed to transform raw security findings into actionabl
 
 `ALLOW`: used when no policy rule matches a finding. In this case, the finding is still recorded, but it is not considered severe enough by the current policy to warn or block the developer.
 
-The current policy rules were defined according to the expected impact and exploitability of each vulnerability category:
+The selected policy rules were not chosen only because they are generally important security categories, they were defined according to two practical constraints: 
+
+- Matching the type of findings that the integrated tools are actually able to report: the policy engine was designed around CWEs that can realistically appear in the normalized findings.
+
+- The policies had to be verifiable against the evaluation target that focus on CWEs that could be exercised and evaluated using the target application. The overlap with OWASP Top 10 categories is a consequence of these choices, since many of the vulnerabilities detected by the tools and present in DVWA also belong to common web application risk categories.
 
 | Rule   | Vulnerability            | Condition                             | Verdict | Rationale                                                                                                                                   |
 | ------ | ------------------------ | ------------------------------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -181,6 +185,7 @@ A policy violation does not simply mean that the scanner reported an issue but t
 #### 5.2 Gatekeeper Findings Classification
 
 <!-- Detection: ✅ Correct (TP) / ❌ False Positive / Negative -->
+
 | Finding | Real vulnerability? | Gatekeeper decision | Detection |
 |-|:-:|:-:|:-:|
 | **CWE-78** in `.github/workflows/docker-image.yml` | Yes | ⛔ Blocked | FP / TP |
