@@ -194,14 +194,41 @@ A policy violation does not simply mean that the scanner reported an issue but t
 | **CWE-94** in  `vulnerabilities/api/src/HealthController.php` | Yes | 🆗 Allowed | FP / TP |
 
 #### 5.3 Metrics
+WIP
 
-WIP
-### 6. Developer Experience and Performance
-WIP
-Gatekeeper was designed to be unobtrusive and fast, integrating seamlessly into the developer workflow:
-- **Performance (Time to Results)**: The scan completes reliably in **under 30 seconds**, well below the target threshold of <30s. This ensures developers are not blocked for long periods when committing code.
-- **Output Clarity**: The terminal output is structured with clear color-coding, grouping findings by severity and verdict. It directly points developers to the file and line number of the issue, along with the specific CWE.
-- **Peer Evaluation**: We asked 3 peers to install and use the Gatekeeper pre-commit hook. They rated the clarity of the tool's output an average of **4.6 / 5**. They particularly praised the policy engine's verdict system (`BLOCK`, `WARN`, `ALLOW`), which helped them focus on critical issues without being overwhelmed by low-severity warnings.
+### 6. Developer Experience (Performance & Peer Evaluation) 
+
+Gatekeeper was evaluated not only in terms of security detection, but also in terms of its usability in a developer workflow. Since the tool is intended to run locally and as part of a pre-commit hook, it must provide useful feedback without introducing excessive delay or friction.
+
+#### 6.1 Performance
+
+Performance was evaluated by observing the time required to complete scans in different development environments. In the main evaluation scenario, Gatekeeper was able to complete the scan within the target threshold of 30 seconds, showing that the tool can provide fast feedback when used as part of a local development workflow.
+
+As expected, however, the scan time is not constant and depends on several factors such as the size of the repository, the enabled security tools, the machine's hardware, the operating system, and the local development/Docker execution environments.
+
+Overall, the results show that Gatekeeper can be effectively used as a local security gate, providing timely feedback before code is committed. For projects where scan time becomes more significant, the tool can still remain practical by adjusting the enabled scanners or by separating quick pre-commit checks from more complete scans executed manually or later in the development pipeline.
+
+#### 6.2 Peer Evaluation
+
+To evaluate Gatekeeper from a developer experience perspective, three peers were asked to test the tool and analyse its output. The goal was to understand whether the tool would be usable in a real development workflow, especially when executed as a local scan or as part of a pre-commit process. The evaluation also aimed to identify possible improvements, missing features, and changes that could make the tool more useful for developers.
+
+**Peer 1: Informatics and Computing Engineering Bachelor's Student**
+- **Context**: Tested on an academic web project developed with HTML, PHP, and JavaScript. 
+- **Feedback**: Considered the tool useful for the tested project and for future development projects. 
+- **Observations**: Highlighted the HTML report as a more visual and accessible way to inspect results. 
+- **Suggestions**: Adding remediation guidance, with code correction suggestions for each detected issue.
+
+**Peer 2: Informatics and Computing Engineering Master's Student**
+- **Context**: Tested on a web application developed with Laravel and JavaScript. 
+- **Feedback**: Considered the tool interesting and useful, because it combines multiple scanners into a single workflow and translates raw findings into clearer policy decisions.
+- **Observations**: Highlighted that the CWE information was useful, but sometimes too generic. 
+- **Suggestions**: The explanation of each CWE should be more specific to the affected code; Adding a code correction mode to the tool (similar to a coding agent, that fixes the affected files).
+
+**Peer 3: Software Developer with Team Project Experience**
+- **Context**: Tested from the perspective of a developer working in a collaborative project environment, where multiple team members may be committing code in parallel.
+- **Feedback**: Considered the tool useful, especially when used on demand to inspect the security state of a project before pushing changes or before merging work into shared branches.
+- **Observations**: Blocking every commit that matches a BLOCK policy could slow down development, especially in team workflows where developers may be working on independent features or temporary branches.
+- **Suggestions**: Integrating Gatekeeper into a CI/CD workflow, where security checks would run automatically before merging into protected branches which would allow the tool to enforce security policies at important integration points, while still giving developers flexibility during local development.
 
 ### 7. Lessons Learned and Limitations
 WIP
