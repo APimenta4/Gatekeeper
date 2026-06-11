@@ -266,9 +266,17 @@ A policy violation does not simply mean that the scanner reported an issue but t
 | **N/A** in  `vulnerabilities/api/composer.lock` | 0 | Yes | 🆗 ALLOWED | ✅ TP |
 
 
-
 #### 5.3 Metrics
-WIP
+
+##### Overall Stats
+
+| Result | Count |
+|-|:-:|
+|✅ True Positives (TP) | 54 |
+|❌ False Positives (FP) | 22 |
+|Total | 76 |
+
+Tool Precision = 54/76 = ~71%
 
 ### 6. Developer Experience (Performance & Peer Evaluation) 
 
