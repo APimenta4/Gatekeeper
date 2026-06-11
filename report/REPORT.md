@@ -184,14 +184,88 @@ A policy violation does not simply mean that the scanner reported an issue but t
 
 #### 5.2 Gatekeeper Findings Classification
 
-<!-- Detection: ✅ Correct (TP) / ❌ False Positive / Negative -->
 
-| Finding | Real vulnerability? | Gatekeeper decision | Detection |
-|-|:-:|:-:|:-:|
-| **CWE-78** in `.github/workflows/docker-image.yml` | Yes | ⛔ Blocked | FP / TP |
-| **CWE-697** in `login.php` | Yes | 🆗 Allowed | FP / TP |
-| **CWE-200** in `phpinfo.php` | Yes | 🆗 Allowed | FP / TP |
-| **CWE-94** in  `vulnerabilities/api/src/HealthController.php` | Yes | 🆗 Allowed | FP / TP |
+<!-- Detection: ✅ Correct (TP) / ❌ False Positive / Negative -->
+| Finding | Line | Real vulnerability? | Gatekeeper decision | Detection |
+|-|:-:|:-:|:-:|:-:|
+| **CWE-78** in `.github/workflows/docker-image.yml` | 29 | Yes | ⛔ BLOCKED | ✅ TP |
+| **CWE-697** in `login.php` | 41 | No | 🆗 ALLOWED | ❌ FP |
+| **CWE-200** in `phpinfo.php` | 8 | Yes | 🆗 ALLOWED | ✅ TP |
+| **CWE-94** in  `vulnerabilities/api/src/HealthController.php` | 88 | Yes | 🆗 ALLOWED | ✅ TP |
+| **CWE-89** in  `vulnerabilities/bac/source/low.php` | 22 | No | ⛔ BLOCKED | 	❌ FP |
+| **CWE-89** in  `vulnerabilities/bac/source/low.php` | 35 | No | ⛔ BLOCKED | 	❌ FP |
+| **CWE-89** in  `vulnerabilities/bac/source/low.php` | 79 | Yes | ⛔ BLOCKED | ✅ TP |
+| **CWE-89** in  `vulnerabilities/bac/source/medium.php` | 21 | No | ⛔ BLOCKED | 	❌ FP |
+| **CWE-89** in  `vulnerabilities/bac/source/medium.php` | 28 | No | ⛔ BLOCKED | 	❌ FP |
+| **CWE-89** in  `vulnerabilities/bac/source/medium.php` | 73 | Yes | ⛔ BLOCKED | ✅ TP |
+| **CWE-697** in  `vulnerabilities/brute/source/high.php` | 22 | No | 🆗 ALLOWED | 	❌ FP |
+| **CWE-89** in  `vulnerabilities/brute/source/low.php` | 12 | Yes | ⛔ BLOCKED | ✅ TP |
+| **CWE-697** in  `vulnerabilities/brute/source/low.php` | 15 | No | 🆗 ALLOWED | 	❌ FP |
+| **CWE-697** in  `vulnerabilities/brute/source/medium.php` | 17 | No | 🆗 ALLOWED | ❌ FP |
+| **CWE-697** in  `vulnerabilities/captcha/source/impossible.php` | 46 | Yes | 🆗 ALLOWED | ✅ TP |
+| **CWE-697** in  `vulnerabilities/cryptography/source/ecb_attack.php` | 92 | No | 🆗 ALLOWED | 	❌ FP |
+| **CWE-697** in  `vulnerabilities/cryptography/source/ecb_attack.php` | 92 | No | 🆗 ALLOWED | 	❌ FP |
+| **CWE-697** in  `vulnerabilities/csrf/test_credentials.php` | 23 | No | 🆗 ALLOWED | 	❌ FP |
+| **CWE-94** in  `vulnerabilities/exec/source/high.php` | 26 | Yes | 🆗 ALLOWED | ✅ TP |
+| **CWE-94** in  `vulnerabilities/exec/source/high.php` | 26 | Yes | 🆗 ALLOWED | ✅ TP |
+| **CWE-94** in  `vulnerabilities/exec/source/high.php` | 30 | Yes | 🆗 ALLOWED | ✅ TP |
+| **CWE-94** in  `vulnerabilities/exec/source/high.php` | 30 | Yes | 🆗 ALLOWED | ✅ TP |
+| **CWE-94** in  `vulnerabilities/exec/source/impossible.php` | 22 | No | 🆗 ALLOWED | ❌ FP |
+| **CWE-94** in  `vulnerabilities/exec/source/impossible.php` | 22 | No | 🆗 ALLOWED |	❌ FP |
+| **CWE-94** in  `vulnerabilities/exec/source/impossible.php` | 26 | No | 🆗 ALLOWED | ❌ FP |
+| **CWE-94** in  `vulnerabilities/exec/source/impossible.php` | 26 | No | 🆗 ALLOWED | ❌ FP |
+| **CWE-94** in  `vulnerabilities/exec/source/low.php` | 10 | Yes | 🆗 ALLOWED | ✅ TP |
+| **CWE-94** in  `vulnerabilities/exec/source/low.php` | 10 | Yes | 🆗 ALLOWED | ✅ TP |
+| **CWE-94** in  `vulnerabilities/exec/source/low.php` | 14 | Yes | 🆗 ALLOWED | ✅ TP |
+| **CWE-94** in  `vulnerabilities/exec/source/low.php` | 14 | Yes | 🆗 ALLOWED | ✅ TP |
+| **CWE-94** in  `vulnerabilities/exec/source/medium.php` | 19 | Yes | 🆗 ALLOWED | ✅ TP |
+| **CWE-94** in  `vulnerabilities/exec/source/medium.php` | 19 | Yes | 🆗 ALLOWED | ✅ TP |
+| **CWE-94** in  `vulnerabilities/exec/source/medium.php` | 23 | Yes | 🆗 ALLOWED | ✅ TP |
+| **CWE-94** in  `vulnerabilities/exec/source/medium.php` | 23 | Yes | 🆗 ALLOWED | ✅ TP |
+| **CWE-697** in  `vulnerabilities/javascript/index.php` | 43 | Yes | 🆗 ALLOWED | ✅ TP |
+| **CWE-697** in  `vulnerabilities/javascript/index.php` | 57 | No | 🆗 ALLOWED | 	❌ FP |
+| **CWE-89** in  `vulnerabilities/sqli/source/low.php` | 10 | Yes | ⛔ BLOCKED | ✅ TP |
+| **CWE-89** in  `vulnerabilities/sqli/source/low.php` | 31 | Yes | ⛔ BLOCKED | ✅ TP |
+| **CWE-89** in  `vulnerabilities/sqli_blind/source/high.php` | 11 | Yes | ⛔ BLOCKED | ✅ TP |
+| **CWE-89** in  `vulnerabilities/sqli_blind/source/high.php` | 33 | Yes | ⛔ BLOCKED | ✅ TP |
+| **CWE-89** in  `vulnerabilities/sqli_blind/source/low.php` | 11 | Yes | ⛔ BLOCKED | ✅ TP |
+| **CWE-89** in  `vulnerabilities/sqli_blind/source/low.php` | 32 | Yes | ⛔ BLOCKED | ✅ TP |
+| **CWE-89** in  `vulnerabilities/sqli_blind/source/medium.php` | 34 | Yes | ⛔ BLOCKED | ✅ TP |
+| **CWE-78** in  `vulnerabilities/view_help.php` | 20 | Yes | ⛔ BLOCKED | ✅ TP |
+| **CWE-78** in  `vulnerabilities/view_help.php` | 22 | Yes | ⛔ BLOCKED | ✅ TP  |
+| **CWE-918** in  `instructions.php` | 26 | No | 🆗 ALLOWED | 	❌ FP |
+| **CWE-346** in  `vulnerabilities/api/gen_openapi.php` | 6 | Yes | 🆗 ALLOWED | ✅ TP |
+| **CWE-346** in  `vulnerabilities/api/public/index.php` | 11 | Yes | 🆗 ALLOWED | ✅ TP |
+| **CWE-78** in  `vulnerabilities/api/src/HealthController.php` | 88 | Yes | ⛔ BLOCKED | ✅ TP |
+| **CWE-252** in  `vulnerabilities/api/src/Token.php` | 39 | Yes | 🆗 ALLOWED | ✅ TP |
+| **CWE-78** in  `vulnerabilities/exec/source/high.php` | 26 | Yes | ⛔ BLOCKED | ✅ TP |
+| **CWE-78** in  `vulnerabilities/exec/source/high.php` | 30 | Yes | ⛔ BLOCKED | ✅ TP |
+| **CWE-78** in  `vulnerabilities/exec/source/impossible.php` | 22 | No | ⛔ BLOCKED | 	❌ FP |
+| **CWE-78** in  `vulnerabilities/exec/source/impossible.php` | 26 | No | ⛔ BLOCKED | 	❌ FP |
+| **CWE-78** in  `vulnerabilities/exec/source/low.php` | 10 | Yes | ⛔ BLOCKED | ✅ TP |
+| **CWE-78** in  `vulnerabilities/exec/source/low.php` | 14 | Yes | ⛔ BLOCKED | ✅ TP |
+| **CWE-78** in  `vulnerabilities/exec/source/medium.php` | 19 | Yes | ⛔ BLOCKED | ✅ TP |
+| **CWE-78** in  `vulnerabilities/exec/source/medium.php` | 23 | Yes | ⛔ BLOCKED | ✅ TP |
+| **CWE-918** in  `vulnerabilities/fi/source/high.php` | 7 | Yes | 🆗 ALLOWED | ✅ TP |
+| **CWE-918** in  `vulnerabilities/view_help.php` | 20 | Yes | 🆗 ALLOWED | ✅ TP |
+| **CWE-918** in  `vulnerabilities/view_help.php` | 22 | Yes | 🆗 ALLOWED | ✅ TP |
+| **CWE-918** in  `vulnerabilities/view_source.php` | 63 | Yes | 🆗 ALLOWED | ✅ TP |
+| **CWE-918** in  `vulnerabilities/view_source.php` | 67 | Yes | 🆗 ALLOWED | ✅ TP |
+| **CWE-918** in  `vulnerabilities/view_source.php` | 68 | Yes | 🆗 ALLOWED | ✅ TP |
+| **CWE-918** in  `vulnerabilities/view_source_all.php` | 14 | Yes | 🆗 ALLOWED | ✅ TP |
+| **CWE-918** in  `vulnerabilities/view_source_all.php` | 18 | Yes | 🆗 ALLOWED | ✅ TP |
+| **CWE-918** in  `vulnerabilities/view_source_all.php` | 22 | Yes | 🆗 ALLOWED | ✅ TP |
+| **CWE-918** in  `vulnerabilities/view_source_all.php` | 26 | Yes | 🆗 ALLOWED | ✅ TP |
+| **CWE-95** in  `vulnerabilities/javascript/source/high.js` | 1 | Yes | 🆗 ALLOWED | ✅ TP |
+| **CWE-1333** in  `vulnerabilities/javascript/source/high.js` | 1 | Yes | 🆗 ALLOWED | ✅ TP |
+| **CWE-1333** in  `vulnerabilities/javascript/source/high.js` | 1 | Yes | 🆗 ALLOWED | ✅ TP |
+| **CWE-22** in  `vulnerabilities/upload/source/impossible.php` | 54 | No | ⚠️  WARNING | 	❌ FP |
+| **CWE-703** in  `./tests/test_url.py` | 124 | No | 🆗 ALLOWED | 	❌ FP |
+| **N/A** in  `vulnerabilities/api/composer.lock` | 0 | Yes | 🆗 ALLOWED | ✅ TP |
+| **N/A** in  `vulnerabilities/api/composer.lock` | 0 | Yes | 🆗 ALLOWED | ✅ TP |
+| **N/A** in  `vulnerabilities/api/composer.lock` | 0 | Yes | 🆗 ALLOWED | ✅ TP |
+
+
 
 #### 5.3 Metrics
 WIP
