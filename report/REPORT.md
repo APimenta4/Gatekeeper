@@ -313,11 +313,10 @@ To evaluate Gatekeeper from a developer experience perspective, three peers were
 - **Suggestions**: Integrating Gatekeeper into a CI/CD workflow, where security checks would run automatically before merging into protected branches which would allow the tool to enforce security policies at important integration points, while still giving developers flexibility during local development.
 
 ### 7. Lessons Learned and Limitations
-WIP
 - **False Positives with Naive Scanners**: Some underlying SAST tools rely on simple pattern matching, leading to false positives. We learned that tuning the policy engine to handle these cases requires careful rule creation, potentially using more advanced context-aware filters.
 - **Docker Overhead**: While using Docker ensures a clean environment, it introduces a small startup overhead. However, maintaining the sub-30s execution time proved this trade-off is worthwhile for the benefit of avoiding local dependency problems.
 - **Extensibility**: The Python-based policy engine proved highly extensible. Writing custom lambda-based rules is very developer-friendly compared to complex YAML configurations.
+- **Rigid Scope Configuration**: Gatekeeper currently operates on an "all-or-nothing" scanning model, requiring an entire repository scan without the ability to isolate specific folders or exclude sensitive/irrelevant files like .env. We learned that providing a configuration file (e.g., a .gatekeeperignore) is a fast-following necessity to reduce scan noise and give development teams finer control.
 
 ### 8. Conclusion
-WIP
 Gatekeeper successfully meets its goal of serving as an effective, developer-friendly local security gate. By integrating directly into the Git workflow and utilizing a containerized scanning engine with an extensible Python policy layer, it provides immediate security feedback. While false positives and false negatives still exist, inherent to the underlying SAST tools, the custom policy engine mitigates noise by categorizing findings into actionable verdicts. Overall, the tool enhances developer experience and prevents critical vulnerabilities from reaching the main codebase.
