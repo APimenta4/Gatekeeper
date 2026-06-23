@@ -184,7 +184,6 @@ A policy violation does not simply mean that the scanner reported an issue but t
 
 #### 5.2 Gatekeeper Findings Classification
 
-
 <!-- Detection: ✅ Correct (TP) / ❌ False Positive / Negative -->
 | Finding | Line | Real vulnerability? | Gatekeeper decision | Detection |
 |-|:-:|:-:|:-:|:-:|
@@ -277,6 +276,8 @@ A policy violation does not simply mean that the scanner reported an issue but t
 |Total | 76 |
 
 Tool Precision = 54/76 = ~71%
+
+> **False Negatives**: File Upload and Inclusion vulnerabilities, and Brute Force Attacks are not fully detected by Gatekeeper with the defined policies which do not include specific rules for unrestricted file uploads, Local File Inclusion (LFI), Remote File Inclusion (RFI), or missing brute-force protections such as rate limiting, account lockout, or CAPTCHA.
 
 ### 6. Developer Experience (Performance & Peer Evaluation) 
 
