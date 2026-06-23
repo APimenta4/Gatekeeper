@@ -4,10 +4,10 @@ Hi! This is the repository for our SES project.
 
 Our group includes:
 
-- Gonçalo Araújo Guimarães Cardoso Sampaio
-- Gonçalo de Almeida Pinto e Morais de Castro
-- Afonso da Cruz Pimenta
-- José Pedro Pereira da Costa
+- Afonso da Cruz Pimenta (up202502507)
+- Gonçalo Araújo Guimarães Cardoso Sampaio (up202206636)
+- Gonçalo de Almeida Pinto e Morais de Castro (up202007851)
+- José Pedro Pereira da Costa (up202207871)
 
 ## Gatekeeper
 
