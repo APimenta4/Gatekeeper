@@ -30,8 +30,9 @@ The most important files to take a look at are:
     ├── 📁 docker          -> Docker utilities for the CLI
     ├── 📁 src             -> Source code for the gatekeeper CLI
     ├── DEV_DOCS.md        -> Development hints and explanations
-    ├── IMPROVEMENTS.md    -> What's left to do/improve
     ├── README.md          -> Gatekeeper setup and usage instructions
     └── tools-config.yaml  -> SAST tools configuration
+└── 📁 report
+    ├── REPORT.md          -> Gatekeeper evaluation report
 └── README.md              -> You are here!
 ```
