@@ -58,35 +58,19 @@ gatekeeper scan --no-details   # cleaner terminal output (no per-finding message
 
 Exit code `0` = no blockers. Exit code `1` = at least one finding was BLOCKED.
 
+## SAST tools
 
-## Testing against DVWA
+Gatekeeper runs **Semgrep** and **Trivy** on every codebase, plus a language-specific tool selected by file extension:
 
-The repository includes [DVWA (Damn Vulnerable Web Application)](https://github.com/digininja/DVWA) at `test_repo/DVWA/` as a real vulnerable target to scan against.
+| Language | Tool |
+|----------|------|
+| Python | Bandit |
+| JavaScript / TypeScript | ESLint + `eslint-plugin-security` |
+| Java | SpotBugs + FindSecBugs |
+| Go | gosec |
+| C / C++ | Flawfinder |
+| PHP | Progpilot |
 
-```bash
-# Make sure the Docker image is already built (see Installation above)
-
-# Navigate into the DVWA directory
-cd test_repo/DVWA
-
-# Run a full scan
-gatekeeper scan
-
-# Tip: if you haven't set up the pre-commit hook in DVWA, run this first:
-gatekeeper setup
-```
-
-Expected output: several findings, including BLOCKs (command injection, SQL injection, path traversal) and WARNs (XSS, weak crypto). The scan should complete in under 30 seconds.
-
-To test the pre-commit hook end-to-end:
-
-```bash
-cd test_repo/DVWA
-# Make any change to a tracked file
-echo "# test" >> README.md
-git add README.md
-git commit -m "test commit"   # ← gatekeeper scan fires here; blocked if violations found
-```
 
 ## Policy Engine
 
@@ -113,93 +97,11 @@ Findings are classified into three states:
 | GK-007 | Cross-Site Scripting | `cwe == "CWE-79"` | WARN | Context-dependent; framework escaping may mitigate |
 | GK-008 | Weak Cryptography | `cwe == "CWE-327"` | WARN | MD5/SHA-1/DES vulnerable to brute-force; migrate to modern algorithms |
 
-All rules run against every finding. If multiple rules match, the highest-precedence verdict wins (`BLOCK > WARN > ALLOW`). Findings with no matching rule are **ALLOW**ed.
+All rules run against every finding. If multiple rules match, the highest-precedence verdict wins (`BLOCK > WARN > ALLOW`). Findings with no matching rule are **ALLOWed**.
 
 To add a custom rule, append a `Rule(...)` to `default_rules` in `src/gatekeeper/policy/rules.py`.
 
 
-## Running the tests
-
-Unit tests cover the policy engine (verdict logic, engine behaviour, all 8 default rules):
-
-```bash
-cd gatekeeper/
-uv run pytest tests/policy -v
-```
-
-Expected output: **28 tests, all passing**, in under 1 second. No Docker required.
-
-
-## How to run
-
-```bash
-# ── 1. Navigate to the gatekeeper package ─────────────────────────────────────                        
-cd project-mesw-sse-2526-g03/gatekeeper                                                                                                                      
-# ── 2. Install the CLI in the virtual environment ──────────────────────────────────────────────                              
-uv pip install -e .                                                                                                                                                                                       
-# ── 3. Build the Docker scanning image (no cache = fresh install of all tools) ─                             
-docker build docker/Dockerfile -t gatekeeper-scanner .
-                                                                                                                
-# ── 4. Run the unit tests (no Docker needed) ──────────────────────────────────                              
-uv run pytest tests/policy -v
-                                                                    
-# ── 5. Test against DVWA ──────────────────────────────────────────────────────                              
-cd project-mesw-sse-2526-g03/gatekeeper/test_repo/DVWA
-                                                                                                                
-# Set up the pre-commit hook inside DVWA (only needed once)                                                   
-gatekeeper setup                                                                                              
-                                                                                                                
-# On-demand scan — this is what you'll use most                                                               
-gatekeeper scan
-                                                                                                                
-# See live Docker output while scanning                                                                     
-gatekeeper scan --verbose
-
-# Skip HTML report generation                                                                                 
-gatekeeper scan --no-report
-                                                                                                                                                                                                                              
-# ── 6. Trigger the pre-commit hook (the actual assignment demo flow) ───────────                             
-cd project-mesw-sse-2526-g03/gatekeeper/test_repo/DVWA
-                                                                                                                
-# Make a trivial change and commit — gatekeeper scan fires automatically                                    
-echo "# test" >> README.md                                                                                    
-git add README.md                                                                                           
-git commit -m "test: trigger gatekeeper pre-commit hook"
-# ↑ this will block if any BLOCK-verdict findings are found                                   
-```
-
-
-
-## Commands reference
-
-| Command | Description |
-|---------|-------------|
-| `gatekeeper setup` | Install the pre-commit hook into the current Git repository |
-| `gatekeeper scan` | Run all SAST tools on the current repository |
-| `gatekeeper scan --verbose` | Same, but stream live Docker output to the terminal |
-| `gatekeeper scan --no-report` | Same, but skip generating the HTML dashboard |
-
-
-
-## SAST tools
-
-Gatekeeper runs **Semgrep** and **Trivy** on every codebase, plus a language-specific tool selected by file extension:
-
-| Language | Tool |
-|----------|------|
-| Python | Bandit |
-| JavaScript / TypeScript | ESLint + `eslint-plugin-security` |
-| Java | SpotBugs + FindSecBugs |
-| Go | gosec |
-| C / C++ | Flawfinder |
-| PHP | Progpilot |
-
-
-## Known limitations
-
-- **Pre-commit output is buffered.** Git's pre-commit hook mechanism does not stream output in real time — results are shown only after the scan finishes. Use `gatekeeper scan --verbose` outside of a commit to see live progress.
-- **Whole-repo scanning.** The pre-commit hook scans the entire repository, not just staged files. This increases scan time on large codebases.
-- **No directory exclusions yet.** Directories like `.venv`, `node_modules`, `dist`, and `build` are not currently excluded from scans.
 
 
 
