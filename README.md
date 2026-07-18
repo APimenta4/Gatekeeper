@@ -1,23 +1,6 @@
-# MESW SES 2025/2026 - Group 3
-
-Hi! This is the repository for our SES project.
-
-Our group includes:
-
-- Afonso da Cruz Pimenta (up202502507)
-- Gonçalo Araújo Guimarães Cardoso Sampaio (up202206636)
-- Gonçalo de Almeida Pinto e Morais de Castro (up202007851)
-- José Pedro Pereira da Costa (up202207871)
-
 ## Gatekeeper
 
-Gatekeeper is the project idea we decided to implement.
-
-It is a CLI tool that we developed and is able to run multiple SAST tools at once in an easy and user-friendly way. It is designed to be extensible and customizable, allowing users to choose which tools they want to run and how they want to run them.
-
-## Evaluation Report
-
-The project's evaluation report can be found in the [REPORT](report/REPORT.md) file. It contains information about the design of the tool, the achieved results, conclusions and lessons learnt during its development.
+Gatekeeper is a CLI tool that we developed and is able to run multiple SAST tools at once in an easy and user-friendly way. It is designed to be extensible and customizable, allowing users to choose which tools they want to run and how they want to run them.
 
 ## First steps and how to use
 
@@ -27,12 +10,10 @@ The most important files to take a look at are:
 
 ```
 └── 📁 gatekeeper
-    ├── 📁 docker          -> Docker utilities for the CLI
-    ├── 📁 src             -> Source code for the gatekeeper CLI
-    ├── DEV_DOCS.md        -> Development hints and explanations
-    ├── README.md          -> Gatekeeper setup and usage instructions
-    └── tools-config.yaml  -> SAST tools configuration
-└── 📁 report
-    ├── REPORT.md          -> Gatekeeper evaluation report
-└── README.md              -> You are here!
+    ├── 📁 docker          → Docker utilities for the CLI
+    ├── 📁 src             → Source code for the gatekeeper CLI
+    ├── DEV_DOCS.md        → Development hints and explanations
+    ├── README.md          → Gatekeeper setup and usage instructions
+    └── tools-config.yaml  → SAST tools configuration
+└── README.md              → You are here!
 ```
